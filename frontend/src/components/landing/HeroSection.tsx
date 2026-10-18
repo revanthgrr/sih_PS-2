@@ -22,51 +22,47 @@ export const HeroSection: React.FC = () => {
         cloudColor="#FFFFFF"
         skyTopColor="#A8D5F5"
         skyBottomColor="#EAF6FF"
-        speed={0.7}
-        count={5}
+        speed={0.5}
+        count={4}
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left content */}
           <div>
-            <div className="inline-flex items-center gap-2 bg-white/80 border border-sky-300/80 backdrop-blur-xs rounded-full px-3.5 py-1 mb-6 shadow-2xs">
+            <div className="inline-flex items-center gap-2 bg-white/85 border border-sky-300/80 backdrop-blur-xs rounded-full px-3.5 py-1 mb-6 shadow-2xs">
               <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
               <span className="text-xs font-bold text-aerospace-900 uppercase tracking-wider">
-                AI-POWERED PREDICTIVE MAINTENANCE
+                JATAYU · MISSION READINESS INTELLIGENCE
               </span>
             </div>
 
             <h1 className="text-4xl sm:text-5xl font-extrabold text-aerospace-900 leading-tight tracking-tight mb-6">
-              Predict Earlier.{' '}
+              Predictive Intelligence.{' '}
               <br />
-              <span className="text-blue-700">Maintain Smarter.</span>
-              <br />
-              Keep More Aircraft Available.
+              <span className="text-blue-700">Mission Readiness.</span>
             </h1>
 
             <p className="text-base text-slate-700 leading-relaxed mb-8 max-w-xl font-normal">
-              JATAYU connects aircraft health insights, maintenance planning,
-              and spare-parts coordination in one intelligent platform to help teams
-              identify potential issues early, manage resources effectively, and reduce
-              avoidable aircraft downtime.
+              An AI-powered platform for aircraft health monitoring, predictive maintenance,
+              and fleet availability optimization.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3.5">
               <button
-                onClick={() => scrollToSection('features')}
+                onClick={() => scrollToSection('department-access')}
                 className="inline-flex items-center justify-center gap-2 bg-aerospace-900 hover:bg-aerospace-800 text-white font-semibold px-7 py-3 rounded-xl text-xs transition-all shadow-md hover:shadow-lg cursor-pointer hover:-translate-y-0.5"
-                aria-label="Explore JATAYU"
+                aria-label="Explore Fleet Readiness"
               >
-                Explore JATAYU
+                Explore Fleet Readiness
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </button>
               <button
-                onClick={() => scrollToSection('department-access')}
+                onClick={() => scrollToSection('features')}
                 className="inline-flex items-center justify-center gap-2 border border-slate-300/90 bg-white/85 hover:bg-white text-slate-800 hover:text-aerospace-900 font-semibold px-7 py-3 rounded-xl text-xs transition-all backdrop-blur-xs shadow-2xs cursor-pointer hover:-translate-y-0.5"
-                aria-label="Access Department Portal"
+                aria-label="Discover Predictive Maintenance"
               >
-                Access Department Portal
+                Discover Predictive Maintenance
                 <ChevronDown className="w-4 h-4" aria-hidden="true" />
               </button>
             </div>

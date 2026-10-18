@@ -16,8 +16,8 @@ export default function CloudShaderHeroDemo() {
         cloudColor="#FFFFFF"
         skyTopColor="#A8D5F5"
         skyBottomColor="#EAF6FF"
-        speed={0.7}
-        count={5}
+        speed={0.5}
+        count={4}
       />
 
       {/* Top Navbar */}
@@ -72,35 +72,34 @@ export default function CloudShaderHeroDemo() {
         <div className="inline-flex items-center gap-2 rounded-full border border-sky-300/80 bg-white/70 backdrop-blur-xs px-3.5 py-1 mb-5 shadow-2xs">
           <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
           <span className="text-[11px] font-bold uppercase tracking-wider text-aerospace-900">
-            AI-Powered Predictive Maintenance &amp; Fleet Availability
+            JATAYU · MISSION READINESS INTELLIGENCE
           </span>
         </div>
 
         <h1 className="text-4xl font-extrabold tracking-tight text-aerospace-900 drop-shadow-xs sm:text-5xl md:text-6xl leading-[1.12]">
-          Predict Earlier.{' '}
-          <span className="text-blue-700 block sm:inline">Maintain Smarter.</span>{' '}
-          Keep More Aircraft Available.
+          Predictive Intelligence.{' '}
+          <span className="text-blue-700 block sm:inline">Mission Readiness.</span>
         </h1>
 
         <p className="mt-5 max-w-2xl text-sm leading-relaxed text-slate-700 drop-shadow-2xs md:text-base font-normal">
-          JATAYU connects aircraft health monitoring, AI-powered predictive maintenance,
-          constraint-based maintenance scheduling, and spare-parts coordination in one intelligent platform.
+          An AI-powered platform for aircraft health monitoring, predictive maintenance,
+          and fleet availability optimization.
         </p>
 
         {/* CTA Buttons */}
         <div className="mt-8 flex flex-col items-center gap-3.5 sm:flex-row">
           <button
-            onClick={() => scrollTo('features')}
+            onClick={() => scrollTo('department-access')}
             className="flex items-center gap-2 rounded-full bg-aerospace-900 px-7 py-3 text-xs font-semibold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:bg-aerospace-800 cursor-pointer"
           >
-            Explore JATAYU
+            Explore Fleet Readiness
             <ArrowRight className="w-4 h-4" />
           </button>
           <button
-            onClick={() => scrollTo('department-access')}
+            onClick={() => scrollTo('features')}
             className="flex items-center gap-2 rounded-full border border-aerospace-800/30 bg-white/80 px-7 py-3 text-xs font-semibold text-aerospace-900 backdrop-blur-xs transition-all hover:bg-white cursor-pointer shadow-xs"
           >
-            Access Department Portal
+            Discover Predictive Maintenance
             <ChevronDown className="w-4 h-4" />
           </button>
         </div>
