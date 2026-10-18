@@ -1,0 +1,91 @@
+# ============================================================
+# Project Jatayu — .gitignore
+# ============================================================
+
+# --- Environment & Secrets ---
+.env
+.env.local
+.env.production
+.env.development
+.env.staging
+*.env
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+wheels/
+pip-wheel-metadata/
+.eggs/
+lib/
+lib64/
+
+# --- Virtual Environments ---
+venv/
+env/
+ENV/
+.venv/
+.env/
+Pipenv/
+pipenv/
+
+# --- Database Files ---
+*.db
+*.sqlite
+*.sqlite3
+
+# --- ML Model Artifacts (large binary files, regenerate locally) ---
+backend/models/*.pkl
+
+# --- Node / Frontend ---
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- IDE & Editor ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# --- Testing & Coverage ---
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+coverage.xml
+*.cover
+
+# --- Logs ---
+*.log
+logs/
+
+# --- Security Scanning ---
+.bandit
+safety-report.txt
+audit-report.json
+
+# --- Misc ---
+*.bak
+*.tmp
+.cache/
