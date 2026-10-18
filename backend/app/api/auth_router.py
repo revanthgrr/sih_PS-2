@@ -7,7 +7,7 @@ import logging
 from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel, field_validator
 
-from app.auth import verify_demo_credentials, create_access_token
+from app.auth import verify_credentials, create_access_token
 
 logger = logging.getLogger("jatayu.api.auth")
 
@@ -34,6 +34,7 @@ class LoginResponse(BaseModel):
     token_type: str = "bearer"
     expires_in_hours: int
     username: str
+    role: str  # 'demo' | 'commander' | 'spares' | 'technician'
 
 
 @router.post(
@@ -43,15 +44,17 @@ class LoginResponse(BaseModel):
 )
 def login(req: LoginRequest) -> LoginResponse:
     """
-    Validates demo credentials and returns a signed JWT access token.
+    Validates credentials and returns a signed JWT access token.
 
     - Passwords are compared using bcrypt — never stored or logged in plaintext.
     - Invalid credentials always return 401 (no user enumeration).
     - Rate limiting (10 req/min) is enforced by the middleware layer.
+    - The returned 'role' field indicates the authenticated user's department.
     """
     from app.config import settings
 
-    if not verify_demo_credentials(req.username, req.password):
+    role = verify_credentials(req.username, req.password)
+    if role is None:
         # Log failure without revealing which field was wrong
         logger.warning(f"Failed login attempt for username: '{req.username[:20]}'")
         raise HTTPException(
@@ -60,12 +63,13 @@ def login(req: LoginRequest) -> LoginResponse:
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    token = create_access_token(req.username)
-    logger.info(f"Successful login for user: '{req.username}'")
+    token = create_access_token(req.username, role=role)
+    logger.info(f"Successful login for user: '{req.username}' with role: '{role}'")
 
     return LoginResponse(
         access_token=token,
         token_type="bearer",
         expires_in_hours=settings.JWT_EXPIRE_HOURS,
         username=req.username,
+        role=role,
     )

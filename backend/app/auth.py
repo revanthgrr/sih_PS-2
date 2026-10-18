@@ -3,7 +3,8 @@ JWT Authentication module for Jatayu (AeroReady AI).
 
 Provides:
   - Token creation and validation using python-jose
-  - Secure demo credential verification using passlib bcrypt
+  - Secure credential verification using passlib bcrypt
+  - Multi-user role-based authentication
   - FastAPI dependency for protecting API routes
 """
 
@@ -86,29 +87,67 @@ def _verify_password(plain: str, hashed: str) -> bool:
     return hmac.compare_digest(plain_hash, hashed)
 
 
-# Pre-compute hash of demo password at startup so it's never plaintext at runtime
+# Pre-compute hashes at startup so passwords are never plaintext at runtime
 _DEMO_PASSWORD_HASH: str = _hash_password(settings.DEMO_PASSWORD)
+_COMMANDER_PASSWORD_HASH: str = _hash_password(settings.COMMANDER_PASSWORD)
+_SPARES_PASSWORD_HASH: str = _hash_password(settings.SPARES_PASSWORD)
+_TECHNICIAN_PASSWORD_HASH: str = _hash_password(settings.TECHNICIAN_PASSWORD)
 
 
 def verify_demo_credentials(username: str, password: str) -> bool:
     """
-    Verifies credentials against the configured demo user.
-    Passwords are always compared via secure hash — never in plaintext.
+    Legacy helper — verifies against the single demo user only.
+    Preserved for backward compatibility.
     """
     if username != settings.DEMO_USERNAME:
         return False
     return _verify_password(password, _DEMO_PASSWORD_HASH)
 
 
+def verify_credentials(username: str, password: str) -> Optional[str]:
+    """
+    Verifies credentials against all known users.
+    Returns the user's role string on success, None on failure.
+
+    Roles: 'demo' | 'commander' | 'spares' | 'technician'
+    """
+    # Demo/admin user — full access
+    if username == settings.DEMO_USERNAME:
+        if _verify_password(password, _DEMO_PASSWORD_HASH):
+            return "demo"
+        return None
+
+    # Commander
+    if username == settings.COMMANDER_USERNAME:
+        if _verify_password(password, _COMMANDER_PASSWORD_HASH):
+            return "commander"
+        return None
+
+    # Spare Parts
+    if username == settings.SPARES_USERNAME:
+        if _verify_password(password, _SPARES_PASSWORD_HASH):
+            return "spares"
+        return None
+
+    # Technician
+    if username == settings.TECHNICIAN_USERNAME:
+        if _verify_password(password, _TECHNICIAN_PASSWORD_HASH):
+            return "technician"
+        return None
+
+    return None
+
+
 # ----------------------------------------------------------------
 # Token utilities
 # ----------------------------------------------------------------
 
-def create_access_token(username: str) -> str:
-    """Creates a signed JWT access token."""
+def create_access_token(username: str, role: str = "demo") -> str:
+    """Creates a signed JWT access token containing the user role."""
     expire = datetime.now(timezone.utc) + timedelta(hours=settings.JWT_EXPIRE_HOURS)
     payload = {
         "sub": username,
+        "role": role,
         "exp": expire,
         "iat": datetime.now(timezone.utc),
         "type": "access",
@@ -119,7 +158,7 @@ def create_access_token(username: str) -> str:
 
     # Dev fallback: base64-encoded JSON (NOT secure — for local dev only)
     import base64, json
-    token_data = json.dumps({**payload, "exp": expire.isoformat()})
+    token_data = json.dumps({**payload, "exp": expire.isoformat(), "iat": datetime.now(timezone.utc).isoformat()})
     return base64.urlsafe_b64encode(token_data.encode()).decode()
 
 
@@ -146,8 +185,30 @@ def decode_access_token(token: str) -> Optional[str]:
         return None
 
 
+def decode_role_from_token(token: str) -> Optional[str]:
+    """
+    Decodes and returns the role claim from a JWT token.
+    Returns None if token is invalid or role is missing.
+    """
+    try:
+        if _JOSE_AVAILABLE:
+            payload = _jwt.decode(token, _EFFECTIVE_SECRET, algorithms=[settings.JWT_ALGORITHM])
+            return payload.get("role", "demo")
+
+        import base64, json
+        decoded = json.loads(base64.urlsafe_b64decode(token.encode()).decode())
+        from datetime import datetime as dt
+        exp = dt.fromisoformat(decoded.get("exp", ""))
+        if dt.now(timezone.utc) > exp.replace(tzinfo=timezone.utc):
+            return None
+        return decoded.get("role", "demo")
+
+    except Exception:
+        return None
+
+
 # ----------------------------------------------------------------
-# FastAPI dependency
+# FastAPI dependencies
 # ----------------------------------------------------------------
 
 def require_auth(
@@ -174,3 +235,60 @@ def require_auth(
         )
 
     return username
+
+
+def _get_token_from_credentials(
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(_bearer),
+) -> str:
+    """Internal helper — extracts and validates raw token string."""
+    if credentials is None or credentials.scheme.lower() != "bearer":
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authentication required. Please log in.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    username = decode_access_token(credentials.credentials)
+    if username is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired token. Please log in again.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return credentials.credentials
+
+
+def require_role(*allowed_roles: str):
+    """
+    FastAPI dependency factory that enforces role-based access control.
+    The 'demo' role always has access to everything.
+
+    Usage:
+        @router.get("/endpoint", dependencies=[Depends(require_role("commander", "demo"))])
+    """
+    def dependency(
+        credentials: Optional[HTTPAuthorizationCredentials] = Depends(_bearer),
+    ) -> str:
+        if credentials is None or credentials.scheme.lower() != "bearer":
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Authentication required. Please log in.",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        username = decode_access_token(credentials.credentials)
+        if username is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid or expired token. Please log in again.",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        role = decode_role_from_token(credentials.credentials)
+        # demo role always has full access
+        if role == "demo":
+            return role
+        if role not in allowed_roles:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Access denied. Required role(s): {', '.join(allowed_roles)}.",
+            )
+        return role
+    return dependency

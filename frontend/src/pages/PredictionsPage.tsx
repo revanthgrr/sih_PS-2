@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Cpu, AlertTriangle, Clock, ShieldAlert, CheckCircle2, ChevronRight, RefreshCw, BarChart2 } from 'lucide-react';
+import { Cpu, AlertTriangle, Clock, ShieldAlert, CheckCircle2, ChevronRight, RefreshCw, BarChart2, Wrench } from 'lucide-react';
 import { api } from '../services/api';
 import { Prediction } from '../types';
 import { RiskBadge } from '../components/ui/RiskBadge';
 import { DataProvenanceNote } from '../components/ui/DataProvenanceNote';
 import { EmptyState } from '../components/ui/EmptyState';
 import { ApiError } from '../components/ui/ApiError';
+import { toast } from '../components/ui/Toast';
 
 interface PredictionsPageProps {
   onSelectAircraft: (aircraftId: string) => void;
@@ -17,6 +18,7 @@ export const PredictionsPage: React.FC<PredictionsPageProps> = ({ onSelectAircra
   const [error, setError] = useState<string | null>(null);
   const [riskFilter, setRiskFilter] = useState('');
   const [selectedPrediction, setSelectedPrediction] = useState<Prediction | null>(null);
+  const [requestingTask, setRequestingTask] = useState(false);
 
   useEffect(() => {
     fetchPredictions();
@@ -253,9 +255,37 @@ export const PredictionsPage: React.FC<PredictionsPageProps> = ({ onSelectAircra
 
                 <button
                   onClick={() => onSelectAircraft(selectedPrediction.aircraft_id)}
-                  className="w-full mt-3 bg-aerospace-900 hover:bg-aerospace-800 text-white font-semibold py-2 rounded-lg text-xs transition-colors shadow-sm"
+                  className="w-full mt-3 bg-aerospace-900 hover:bg-aerospace-800 text-white font-semibold py-2 rounded-lg text-xs transition-colors shadow-sm cursor-pointer"
                 >
                   Open {selectedPrediction.aircraft_id} Digital Twin
+                </button>
+
+                <button
+                  onClick={async () => {
+                    try {
+                      setRequestingTask(true);
+                      const res = await api.requestInspection(
+                        selectedPrediction.aircraft_id,
+                        selectedPrediction.component_type,
+                        `Predictive Servicing: ${selectedPrediction.component_type} on ${selectedPrediction.aircraft_id}`,
+                        selectedPrediction.recommended_action
+                      );
+                      toast.success(
+                        'Inspection Requested',
+                        res.message || `Task ${res.task_id} successfully queued for scheduling.`
+                      );
+                    } catch (err: any) {
+                      const msg = err?.response?.data?.detail || err?.message || 'Failed to request inspection.';
+                      toast.error('Request Denied / Duplicate', msg);
+                    } finally {
+                      setRequestingTask(false);
+                    }
+                  }}
+                  disabled={requestingTask}
+                  className="w-full mt-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-semibold py-2 rounded-lg text-xs transition-colors shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <Wrench className={`w-3.5 h-3.5 ${requestingTask ? 'animate-spin' : ''}`} />
+                  {requestingTask ? 'Submitting Inspection Request...' : 'Request Maintenance Inspection'}
                 </button>
               </div>
             </div>

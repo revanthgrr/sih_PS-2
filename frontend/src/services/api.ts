@@ -53,7 +53,7 @@ apiClient.interceptors.response.use(
 
 export const api = {
   // Authentication
-  login: async (username: string, password: string): Promise<{ access_token: string; username: string; expires_in_hours: number }> => {
+  login: async (username: string, password: string): Promise<{ access_token: string; username: string; expires_in_hours: number; role: string }> => {
     const res = await axios.post(`${API_URL}/auth/login`, { username, password }, {
       headers: { 'Content-Type': 'application/json' },
       timeout: 10000,
@@ -122,6 +122,14 @@ export const api = {
     const res = await apiClient.post<ScheduleOptimizationResult>('/maintenance/optimize');
     return res.data;
   },
+  updateTaskStatus: async (taskId: string, newStatus: string, notes = '') => {
+    const res = await apiClient.patch(`/maintenance/tasks/${taskId}/status`, { new_status: newStatus, notes });
+    return res.data;
+  },
+  requestInspection: async (aircraft_id: string, component_id: string, task_name = '', reason = '') => {
+    const res = await apiClient.post('/maintenance/request', { aircraft_id, component_id, task_name, reason });
+    return res.data;
+  },
 
   // Logistics & Spares
   getSpares: async (status?: string) => {
@@ -134,6 +142,10 @@ export const api = {
   },
   reserveSpare: async (part_id: string, aircraft_id: string, quantity = 1) => {
     const res = await apiClient.post('/spares/reserve', { part_id, aircraft_id, quantity });
+    return res.data;
+  },
+  updateSpareStock: async (partId: string, adjustment: number, reason = 'Manual stock adjustment') => {
+    const res = await apiClient.patch(`/spares/${partId}/stock`, { adjustment, reason });
     return res.data;
   },
 
@@ -173,5 +185,18 @@ export const api = {
   getModelMetrics: async () => {
     const res = await apiClient.get('/models/metrics');
     return res.data;
-  }
+  },
+
+  // Maintenance Copilot
+  queryCopilot: async (query: string, aircraftId?: string) => {
+    const res = await apiClient.post<{
+      query: string;
+      answer: string;
+      grounded_sources: string[];
+      suggested_followups: string[];
+      data_timestamp: string;
+    }>('/copilot/query', { query, aircraft_id: aircraftId });
+    return res.data;
+  },
 };
+

@@ -1,7 +1,21 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Header } from './components/layout/Header';
-import { Sidebar, NavPage } from './components/layout/Sidebar';
-import { LoginPage } from './pages/LoginPage';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { ProtectedRoute } from './components/ui/ProtectedRoute';
+import { AccessDenied } from './components/ui/AccessDenied';
+import { AppLayout } from './components/layout/AppLayout';
+
+// Public pages
+import { LandingPage } from './pages/LandingPage';
+import { DepartmentLoginPage } from './pages/DepartmentLoginPage';
+
+// Department Dashboards & New Timetable
+import { CommanderDashboard } from './pages/commander/CommanderDashboard';
+import { SparesDashboard } from './pages/spares/SparesDashboard';
+import { TechnicianDashboard } from './pages/technician/TechnicianDashboard';
+import { MaintenanceTimetablePage } from './pages/schedule/MaintenanceTimetablePage';
+
+// Existing Preserved Application Modules
 import { OverviewPage } from './pages/OverviewPage';
 import { FleetPage } from './pages/FleetPage';
 import { AircraftDetailPage } from './pages/AircraftDetailPage';
@@ -13,236 +27,210 @@ import { ModelPerformancePage } from './pages/ModelPerformancePage';
 import { AlertsPage } from './pages/AlertsPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { NotFoundPage } from './pages/NotFoundPage';
-import { ErrorBoundary } from './components/ErrorBoundary';
-import { ToastContainer, toast } from './components/ui/Toast';
-import { api, setAuthToken } from './services/api';
+import { api } from './services/api';
+import { toast } from './components/ui/Toast';
 
-// ─── Page title map ───────────────────────────────────────────────────────────
-const PAGE_TITLES: Record<string, string> = {
-  overview:    'AeroReady AI — Fleet Availability Overview | Jatayu',
-  fleet:       'Fleet Overview | AeroReady AI',
-  aircraft:    'Aircraft Digital Twin | AeroReady AI',
-  predictions: 'Predictions Center | AeroReady AI',
-  maintenance: 'Maintenance Planner | AeroReady AI',
-  spares:      'Logistics & Spares | AeroReady AI',
-  simulation:  'Simulation Lab | AeroReady AI',
-  models:      'Model Performance | AeroReady AI',
-  alerts:      'Alerts & Actions | AeroReady AI',
-  settings:    'System Architecture & Settings | AeroReady AI',
+// ─── Dynamic page title manager ──────────────────────────────────────────────
+const ROUTE_TITLES: Record<string, string> = {
+  '/':                   'JATAYU — Intelligent Maintenance. Optimized Fleet Availability.',
+  '/app/commander':      'Commander Fleet Dashboard | JATAYU',
+  '/app/spares-portal':  'Spare Parts Inventory & Logistics | JATAYU',
+  '/app/technicians':    'Technician Maintenance Workspace | JATAYU',
+  '/app/schedule':       'Visual Maintenance Timetable | JATAYU',
+  '/app/overview':       'Fleet Availability Overview | JATAYU',
+  '/app/fleet':          'Fleet Overview | JATAYU',
+  '/app/aircraft':       'Aircraft Digital Twin | JATAYU',
+  '/app/predictions':    'Prognostics & Predictions Center | JATAYU',
+  '/app/maintenance':    'Maintenance Planner | JATAYU',
+  '/app/spares':         'Logistics & Spares | JATAYU',
+  '/app/simulation':     'Simulation Lab | JATAYU',
+  '/app/models':         'Model Performance | JATAYU',
+  '/app/alerts':         'Alerts & Actions | JATAYU',
+  '/app/settings':       'System Architecture & Settings | JATAYU',
 };
 
-const ALL_PAGES: NavPage[] = [
-  'overview', 'fleet', 'aircraft', 'predictions', 'maintenance',
-  'spares', 'simulation', 'models', 'alerts', 'settings',
-];
+const TitleWatcher: React.FC = () => {
+  const location = useLocation();
 
-export function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [currentUser, setCurrentUser] = useState<string>('Demo User');
-  const [currentPage, setCurrentPage] = useState<NavPage>('overview');
-  const [selectedAircraftId, setSelectedAircraftId] = useState<string>('A101');
-  const [unreadAlerts, setUnreadAlerts] = useState<number>(0);
-  const [isSimRunning, setIsSimRunning] = useState<boolean>(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
-
-  // ─── Dynamic page titles ──────────────────────────────────────────────────
   useEffect(() => {
-    if (!isAuthenticated) {
-      document.title = 'Login | AeroReady AI';
-      return;
-    }
-    if (currentPage === 'aircraft') {
-      document.title = `Aircraft ${selectedAircraftId} | AeroReady AI`;
+    if (location.pathname.startsWith('/login')) {
+      document.title = 'Department Portal Login | JATAYU';
     } else {
-      document.title = PAGE_TITLES[currentPage] ?? 'AeroReady AI';
+      document.title = ROUTE_TITLES[location.pathname] ?? 'JATAYU';
     }
-  }, [currentPage, isAuthenticated, selectedAircraftId]);
+  }, [location.pathname]);
 
-  // ─── Alert count refresh ──────────────────────────────────────────────────
-  const fetchAlertCount = useCallback(async () => {
-    if (!isAuthenticated) return;
-    try {
-      const res = await api.getAlerts(undefined, true);
-      setUnreadAlerts(res.total);
-    } catch {
-      // Backend may still be initializing — silently ignore
-    }
-  }, [isAuthenticated]);
+  return null;
+};
 
-  useEffect(() => {
-    fetchAlertCount();
-  }, [currentPage, fetchAlertCount]);
+// ─── Redirect root /app to the authenticated user's department dashboard ──────
+const AppIndexRedirect: React.FC = () => {
+  const { role } = useAuth();
 
-  // ─── Auth handlers ────────────────────────────────────────────────────────
-  const handleLogin = (username: string) => {
-    setCurrentUser(username);
-    setIsAuthenticated(true);
-    setCurrentPage('overview');
-  };
-
-  const handleLogout = () => {
-    setAuthToken(null);
-    setIsAuthenticated(false);
-    setCurrentUser('Demo User');
-    setCurrentPage('overview');
-    setUnreadAlerts(0);
-  };
-
-  // ─── Navigation handlers ──────────────────────────────────────────────────
-  const handleSelectAircraft = (aircraftId: string) => {
-    setSelectedAircraftId(aircraftId);
-    setCurrentPage('aircraft');
-  };
-
-  const handleNavigatePage = (page: string) => {
-    if (ALL_PAGES.includes(page as NavPage)) {
-      setCurrentPage(page as NavPage);
-    }
-  };
-
-  // ─── Simulation handlers ──────────────────────────────────────────────────
-  const handleQuickSimulationStep = async () => {
-    setIsSimRunning(true);
-    try {
-      await api.stepSimulation('A101');
-      await fetchAlertCount();
-    } catch {
-      toast.error('Simulation step failed', 'Unable to advance simulation. Is the backend running?');
-    } finally {
-      setTimeout(() => setIsSimRunning(false), 500);
-    }
-  };
-
-  const handleResetSimulation = async () => {
-    try {
-      await api.resetSimulation('A101');
-      await fetchAlertCount();
-      toast.success('Simulation reset', 'Simulation state has been reset to initial values.');
-    } catch {
-      toast.error('Reset failed', 'Unable to reset simulation. Please try again.');
-    }
-  };
-
-  // ─── Login screen ─────────────────────────────────────────────────────────
-  if (!isAuthenticated) {
-    return (
-      <>
-        <LoginPage onLogin={handleLogin} />
-        <ToastContainer />
-      </>
-    );
+  switch (role) {
+    case 'commander':
+      return <Navigate to="/app/commander" replace />;
+    case 'spares':
+      return <Navigate to="/app/spares-portal" replace />;
+    case 'technician':
+      return <Navigate to="/app/technicians" replace />;
+    default:
+      return <Navigate to="/app/overview" replace />;
   }
+};
 
-  // ─── Determine if page is known ───────────────────────────────────────────
-  const isKnownPage = ALL_PAGES.includes(currentPage);
+// ─── Aircraft Detail Page wrapper handling query params ──────────────────────
+const AircraftDetailPageWrapper: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const aircraftId = searchParams.get('id') || 'A101';
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-      {/* Top Header */}
-      <Header
-        onNavigateAlerts={() => setCurrentPage('alerts')}
-        onQuickSim={handleQuickSimulationStep}
-        onResetSim={handleResetSimulation}
-        onToggleSidebar={() => setIsSidebarOpen(prev => !prev)}
-        onLogout={handleLogout}
-        alertCount={unreadAlerts}
-        isSimRunning={isSimRunning}
-        username={currentUser}
-      />
+    <AircraftDetailPage
+      aircraftId={aircraftId}
+      onNavigatePage={(page) => navigate(`/app/${page}`)}
+    />
+  );
+};
 
-      <div className="flex flex-1">
-        {/* Left Sidebar — responsive drawer on mobile */}
-        <Sidebar
-          currentPage={currentPage}
-          onSelectPage={(page) => setCurrentPage(page)}
-          unreadAlertsCount={unreadAlerts}
-          isOpen={isSidebarOpen}
-          onClose={() => setIsSidebarOpen(false)}
-        />
+// ─── Overview Page wrapper ───────────────────────────────────────────────────
+const OverviewPageWrapper: React.FC = () => {
+  const navigate = useNavigate();
 
-        {/* Main Content Area */}
-        <main
-          id="main-content"
-          className="flex-1 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full overflow-x-hidden overflow-y-auto"
-        >
-          {!isKnownPage ? (
-            <NotFoundPage onNavigateHome={() => setCurrentPage('overview')} />
-          ) : (
-            <>
-              {currentPage === 'overview' && (
-                <ErrorBoundary moduleName="Overview" onNavigateHome={() => setCurrentPage('overview')}>
-                  <OverviewPage
-                    onSelectAircraft={handleSelectAircraft}
-                    onNavigatePage={handleNavigatePage}
-                    onQuickSim={handleQuickSimulationStep}
-                  />
-                </ErrorBoundary>
-              )}
+  const handleQuickSimulationStep = async () => {
+    try {
+      await api.stepSimulation('A101');
+      toast.success('Simulation Stepped', 'Sensor degradation telemetry updated for A101.');
+    } catch {
+      toast.error('Simulation step failed', 'Unable to advance simulation. Is the backend running?');
+    }
+  };
 
-              {currentPage === 'fleet' && (
-                <ErrorBoundary moduleName="Fleet Overview" onNavigateHome={() => setCurrentPage('overview')}>
-                  <FleetPage onSelectAircraft={handleSelectAircraft} />
-                </ErrorBoundary>
-              )}
+  return (
+    <OverviewPage
+      onSelectAircraft={(id) => navigate(`/app/aircraft?id=${id}`)}
+      onNavigatePage={(page) => navigate(`/app/${page}`)}
+      onQuickSim={handleQuickSimulationStep}
+    />
+  );
+};
 
-              {currentPage === 'aircraft' && (
-                <ErrorBoundary moduleName="Aircraft Digital Twin" onNavigateHome={() => setCurrentPage('overview')}>
-                  <AircraftDetailPage
-                    aircraftId={selectedAircraftId}
-                    onNavigatePage={handleNavigatePage}
-                  />
-                </ErrorBoundary>
-              )}
+// ─── Main App Component ──────────────────────────────────────────────────────
+export function App() {
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <TitleWatcher />
+        <Routes>
+          {/* Public Landing & Login */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login/:department" element={<DepartmentLoginPage />} />
+          <Route path="/login" element={<Navigate to="/login/commander" replace />} />
+          <Route path="/access-denied" element={<AccessDenied />} />
 
-              {currentPage === 'predictions' && (
-                <ErrorBoundary moduleName="Predictions Center" onNavigateHome={() => setCurrentPage('overview')}>
-                  <PredictionsPage onSelectAircraft={handleSelectAircraft} />
-                </ErrorBoundary>
-              )}
+          {/* Authenticated Department & System Routes */}
+          <Route
+            path="/app"
+            element={
+              <ProtectedRoute>
+                <AppLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<AppIndexRedirect />} />
 
-              {currentPage === 'maintenance' && (
-                <ErrorBoundary moduleName="Maintenance Planner" onNavigateHome={() => setCurrentPage('overview')}>
-                  <MaintenancePlannerPage />
-                </ErrorBoundary>
-              )}
+            {/* Department-Specific Dashboards */}
+            <Route
+              path="commander"
+              element={
+                <ProtectedRoute allowedRoles={['commander', 'demo']}>
+                  <CommanderDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="spares-portal"
+              element={
+                <ProtectedRoute allowedRoles={['spares', 'demo']}>
+                  <SparesDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="technicians"
+              element={
+                <ProtectedRoute allowedRoles={['technician', 'demo']}>
+                  <TechnicianDashboard />
+                </ProtectedRoute>
+              }
+            />
 
-              {currentPage === 'spares' && (
-                <ErrorBoundary moduleName="Logistics & Spares" onNavigateHome={() => setCurrentPage('overview')}>
-                  <LogisticsPage />
-                </ErrorBoundary>
-              )}
+            {/* Visual Maintenance Timetable */}
+            <Route
+              path="schedule"
+              element={
+                <MaintenanceTimetablePage
+                  onSelectAircraft={(id) => {
+                    window.location.href = `/app/aircraft?id=${id}`;
+                  }}
+                />
+              }
+            />
 
-              {currentPage === 'simulation' && (
-                <ErrorBoundary moduleName="Simulation Lab" onNavigateHome={() => setCurrentPage('overview')}>
-                  <SimulationLabPage />
-                </ErrorBoundary>
-              )}
+            {/* Preserved Core Applications */}
+            <Route path="overview" element={<OverviewPageWrapper />} />
+            <Route
+              path="fleet"
+              element={
+                <FleetPage
+                  onSelectAircraft={(id) => {
+                    window.location.href = `/app/aircraft?id=${id}`;
+                  }}
+                />
+              }
+            />
+            <Route path="aircraft" element={<AircraftDetailPageWrapper />} />
+            <Route
+              path="predictions"
+              element={
+                <PredictionsPage
+                  onSelectAircraft={(id) => {
+                    window.location.href = `/app/aircraft?id=${id}`;
+                  }}
+                />
+              }
+            />
+            <Route path="maintenance" element={<MaintenancePlannerPage />} />
+            <Route path="spares" element={<LogisticsPage />} />
+            <Route path="simulation" element={<SimulationLabPage />} />
+            <Route path="models" element={<ModelPerformancePage />} />
+            <Route
+              path="alerts"
+              element={
+                <AlertsPage
+                  onSelectAircraft={(id) => {
+                    window.location.href = `/app/aircraft?id=${id}`;
+                  }}
+                />
+              }
+            />
+            <Route path="settings" element={<SettingsPage />} />
+          </Route>
 
-              {currentPage === 'models' && (
-                <ErrorBoundary moduleName="Model Performance" onNavigateHome={() => setCurrentPage('overview')}>
-                  <ModelPerformancePage />
-                </ErrorBoundary>
-              )}
-
-              {currentPage === 'alerts' && (
-                <ErrorBoundary moduleName="Alerts & Actions" onNavigateHome={() => setCurrentPage('overview')}>
-                  <AlertsPage onSelectAircraft={handleSelectAircraft} />
-                </ErrorBoundary>
-              )}
-
-              {currentPage === 'settings' && (
-                <ErrorBoundary moduleName="Settings" onNavigateHome={() => setCurrentPage('overview')}>
-                  <SettingsPage />
-                </ErrorBoundary>
-              )}
-            </>
-          )}
-        </main>
-      </div>
-
-      {/* Global toast notifications */}
-      <ToastContainer />
-    </div>
+          {/* 404 Catch-All */}
+          <Route
+            path="*"
+            element={
+              <NotFoundPage
+                onNavigateHome={() => {
+                  window.location.href = '/';
+                }}
+              />
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

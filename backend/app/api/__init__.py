@@ -12,6 +12,7 @@ from app.api.spares import router as spares_router
 from app.api.simulation import router as simulation_router
 from app.api.alerts import router as alerts_router
 from app.api.models_perf import router as models_perf_router
+from app.api.copilot import router as copilot_router
 
 api_router = APIRouter()
 
@@ -30,3 +31,4 @@ api_router.include_router(spares_router, dependencies=_auth)
 api_router.include_router(simulation_router, dependencies=_auth)
 api_router.include_router(alerts_router, dependencies=_auth)
 api_router.include_router(models_perf_router, dependencies=_auth)
+api_router.include_router(copilot_router, dependencies=_auth)

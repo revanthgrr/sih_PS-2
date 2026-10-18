@@ -51,6 +51,14 @@ class Settings:
     DEMO_USERNAME: str = os.getenv("DEMO_USERNAME", "demo")
     DEMO_PASSWORD: str = os.getenv("DEMO_PASSWORD", "demo")
 
+    # Role-based demo users
+    COMMANDER_USERNAME: str = os.getenv("COMMANDER_USERNAME", "commander")
+    COMMANDER_PASSWORD: str = os.getenv("COMMANDER_PASSWORD", "commander123")
+    SPARES_USERNAME: str = os.getenv("SPARES_USERNAME", "spares")
+    SPARES_PASSWORD: str = os.getenv("SPARES_PASSWORD", "spares123")
+    TECHNICIAN_USERNAME: str = os.getenv("TECHNICIAN_USERNAME", "technician")
+    TECHNICIAN_PASSWORD: str = os.getenv("TECHNICIAN_PASSWORD", "tech123")
+
     # --- CORS ---
     # Allowed origins for development
     _DEV_ORIGINS: list = [
