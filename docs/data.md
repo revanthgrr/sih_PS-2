@@ -1,4 +1,4 @@
-# 📊 Jatayu (AeroReady AI) — Data Strategy & Dataset Provenance
+# 📊 Jatayu AI — Data Strategy & Dataset Provenance
 
 ---
 

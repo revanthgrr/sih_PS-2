@@ -1,6 +1,6 @@
-# 🏛️ Jatayu (AeroReady AI) — System Architecture
+# 🏛️ Jatayu AI — System Architecture
 
-**Problem Statement ID:** SIH 26249  
+**Team:** TrackForce  
 **Organization:** Ministry of Defence | Department: Defence Services Staff College  
 **Theme:** Transportation & Logistics  
 

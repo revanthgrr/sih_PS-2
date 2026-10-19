@@ -1,6 +1,6 @@
-# Run Project Jatayu (AeroReady AI) - Frontend Server
-Write-Host "==========================================================" -ForegroundColor Cyan
-Write-Host " Starting Project Jatayu (AeroReady AI) Frontend Server... " -ForegroundColor Cyan
+# Run Jatayu AI - Frontend Server
+Write-Host "=========================================================" -ForegroundColor Cyan
+Write-Host " Starting Jatayu AI Frontend Server... " -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Cyan
 
 Set-Location -Path "$PSScriptRoot\frontend"

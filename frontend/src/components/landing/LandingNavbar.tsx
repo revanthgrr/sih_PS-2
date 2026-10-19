@@ -40,7 +40,7 @@ export const LandingNavbar: React.FC = () => {
           </div>
           <div>
             <span className="text-sm font-bold text-aerospace-900 tracking-tight">JATAYU</span>
-            <div className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider -mt-0.5">Vimaan AI</div>
+            <div className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider -mt-0.5">Jatayu AI</div>
           </div>
         </Link>
 

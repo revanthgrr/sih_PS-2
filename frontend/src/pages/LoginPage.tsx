@@ -51,7 +51,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
             <img src="/eagle.svg" alt="Jatayu Eagle" className="w-full h-full object-contain p-1" />
           </div>
           <h1 className="text-xl font-bold tracking-tight">Jatayu</h1>
-          <div className="text-xs text-sky-300 font-medium"> Vimaan AI</div>
+          <div className="text-xs text-sky-300 font-medium"> Jatayu AI</div>
           <p className="text-[11px] text-slate-300 mt-1">
             Predictive Maintenance &amp; Fleet Availability Intelligence
           </p>

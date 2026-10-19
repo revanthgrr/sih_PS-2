@@ -1,5 +1,5 @@
 """
-Rate limiter middleware for Jatayu (AeroReady AI).
+Rate limiter middleware for Jatayu AI.
 
 Implements a simple in-memory per-IP sliding-window rate limiter.
 Uses no external packages — only Python stdlib (time, collections, threading).

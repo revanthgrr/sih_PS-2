@@ -20,7 +20,7 @@ export const LandingFooter: React.FC = () => {
               </div>
               <div>
                 <span className="text-sm font-bold tracking-tight text-white">JATAYU</span>
-                <div className="text-[10px] text-slate-400 font-medium">Vimaan AI</div>
+                <div className="text-[10px] text-slate-400 font-medium">Jatayu AI</div>
               </div>
             </div>
             <p className="text-xs text-slate-300 leading-relaxed max-w-sm">
@@ -81,7 +81,7 @@ export const LandingFooter: React.FC = () => {
         {/* Bottom bar */}
         <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
           <p className="text-[11px] text-slate-400">
-            © 2026 Team TrackForce — JATAYU (Vimaan AI). Intelligent Maintenance &amp; Fleet Availability.
+            © 2026 Team TrackForce — Jatayu AI. Intelligent Maintenance &amp; Fleet Availability.
           </p>
           <p className="text-[11px] text-slate-400">
             Powered by Google OR-Tools CP-SAT · XGBoost · SHAP · FastAPI · React &amp; Tailwind CSS

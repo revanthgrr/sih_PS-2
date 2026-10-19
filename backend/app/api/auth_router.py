@@ -1,5 +1,5 @@
 """
-Authentication API router for Jatayu (AeroReady AI).
+Authentication API router for Jatayu AI.
 Provides the /api/auth/login endpoint.
 """
 

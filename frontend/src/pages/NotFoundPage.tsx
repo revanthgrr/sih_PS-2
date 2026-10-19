@@ -50,7 +50,7 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigateHome }) =>
         </div>
 
         <p className="text-[11px] text-slate-400">
-          Jatayu AeroReady AI · SIH 26249 · Ministry of Defence
+          Jatayu AI · Team TrackForce · Ministry of Defence
         </p>
       </div>
     </div>

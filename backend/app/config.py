@@ -1,6 +1,7 @@
 import os
 import sys
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Root paths
 BACKEND_DIR = Path(__file__).resolve().parent.parent
@@ -8,9 +9,13 @@ BASE_DIR = BACKEND_DIR.parent
 MODELS_DIR = BACKEND_DIR / "models"
 MODELS_METRICS_DIR = MODELS_DIR / "metrics"
 
+# Load environment variables from project root or backend
+load_dotenv(BASE_DIR / ".env")
+load_dotenv(BACKEND_DIR / ".env")
+
 
 class Settings:
-    PROJECT_NAME: str = "Jatayu - AeroReady AI"
+    PROJECT_NAME: str = "Jatayu AI"
     VERSION: str = "1.0.0"
     API_PREFIX: str = "/api"
 

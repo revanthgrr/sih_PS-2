@@ -49,7 +49,7 @@ COMPONENT_NAMES = {
 
 def seed_database():
     print("=" * 60)
-    print("Initializing Jatayu (AeroReady AI) Database & Seed Dataset...")
+    print("Initializing Jatayu AI Database & Seed Dataset...")
     print(f"Random seed: {RANDOM_SEED}")
     print("=" * 60)
 

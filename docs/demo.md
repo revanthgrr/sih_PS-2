@@ -1,12 +1,12 @@
-# 🎯 Jatayu (AeroReady AI) — SIH Judge Demonstration Script
+# 🎯 Jatayu AI — Demonstration Script
 
-Follow this step-by-step presentation script to demonstrate the complete end-to-end capabilities of **Jatayu (AeroReady AI)** in under 5 minutes:
+Follow this step-by-step presentation script to demonstrate the complete end-to-end capabilities of **Jatayu AI** in under 5 minutes:
 
 ---
 
 ## The Presentation Narrative
 
-> *"Problem Statement SIH 26249 addresses low aircraft availability caused by fragmented and reactive maintenance. Today, we demonstrate **Jatayu**, an intelligence platform that connects health-monitoring telemetry to proactive maintenance planning and resource optimization."*
+> *"Jatayu AI addresses low aircraft availability caused by fragmented and reactive maintenance. Today, we demonstrate **Jatayu**, an intelligence platform that connects health-monitoring telemetry to proactive maintenance planning and resource optimization."*
 
 ---
 

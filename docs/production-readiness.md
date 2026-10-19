@@ -1,7 +1,7 @@
 # Project Jatayu — Production Readiness Checklist & Deployment Guide
 
 **Target Environment:** Production / Defence Staging  
-**Application:** Jatayu (AeroReady AI)  
+**Application:** Jatayu AI  
 
 ---
 

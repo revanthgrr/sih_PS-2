@@ -21,7 +21,7 @@ def test_health():
     assert res.status_code == 200
     data = res.json()
     assert data["status"] == "healthy"
-    assert "AeroReady" in data["service"]
+    assert "Jatayu" in data["service"]
 
 def test_auth_required():
     """Unauthenticated requests to protected endpoints must return 401."""

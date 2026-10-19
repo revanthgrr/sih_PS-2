@@ -1,4 +1,4 @@
-# 🧠 Jatayu (AeroReady AI) — Machine Learning & Explainability
+# 🧠 Jatayu AI — Machine Learning & Explainability
 
 ---
 

@@ -31,7 +31,7 @@ export default function CloudShaderHeroDemo() {
               JATAYU
             </span>
             <span className="block text-[10px] text-slate-600 font-semibold uppercase tracking-wider -mt-1">
-              Vimaan AI
+              Jatayu AI
             </span>
           </div>
         </Link>

@@ -1,7 +1,7 @@
 # Project Jatayu — Security & Hardening Audit Report
 
 **Date:** October 2026  
-**Target:** Jatayu (AeroReady AI) — Full Stack Audit  
+**Target:** Jatayu AI — Full Stack Audit  
 **Classification:** Confidential Prototype / Pre-Production Hardening  
 **Auditor:** Automated Hardening & Security Assurance Engine  
 

@@ -42,15 +42,15 @@
 
 | View Key | Title | Dynamic Head Title | Mobile Drawer Nav | Error Boundary | Empty State | Success Toast | Status |
 |---|---|---|---|---|---|---|---|
-| `login` | Login | `Login \| AeroReady AI` | N/A | Global | N/A | Toast on error | ✅ Verified |
-| `overview` | Fleet Availability Overview | `AeroReady AI — Fleet Availability Overview \| Jatayu` | Yes | Wrapped | `ApiError` card | Toast on quick sim | ✅ Verified |
-| `fleet` | Fleet Asset Directory | `Fleet Overview \| AeroReady AI` | Yes | Wrapped | `EmptyState` component | N/A | ✅ Verified |
-| `aircraft` | Aircraft Digital Twin | `Aircraft {ID} \| AeroReady AI` | Yes | Wrapped | `ApiError` card | Toast on inference | ✅ Verified |
-| `predictions` | AI Prognostics Center | `Predictions Center \| AeroReady AI` | Yes | Wrapped | `EmptyState` component | N/A | ✅ Verified |
-| `maintenance`| Maintenance Planner | `Maintenance Planner \| AeroReady AI` | Yes | Wrapped | `EmptyState` component | Toast on optimize | ✅ Verified |
-| `spares` | Logistics & Spares | `Logistics & Spares \| AeroReady AI` | Yes | Wrapped | `EmptyState` component | Toast on reserve | ✅ Verified |
-| `simulation` | Prognostic Simulation Lab | `Simulation Lab \| AeroReady AI` | Yes | Wrapped | Inline error | Toast on step/reset | ✅ Verified |
-| `models` | Model Performance | `Model Performance \| AeroReady AI` | Yes | Wrapped | `ApiError` card | N/A | ✅ Verified |
-| `alerts` | Alerts & Actions | `Alerts & Actions \| AeroReady AI` | Yes | Wrapped | `EmptyState` component | Toast on ack | ✅ Verified |
-| `settings` | System Architecture | `System Architecture & Settings \| AeroReady AI` | Yes | Wrapped | Static docs | N/A | ✅ Verified |
+| `login` | Login | `Login \| Jatayu AI` | N/A | Global | N/A | Toast on error | ✅ Verified |
+| `overview` | Fleet Availability Overview | `Jatayu AI — Fleet Availability Overview \| Jatayu` | Yes | Wrapped | `ApiError` card | Toast on quick sim | ✅ Verified |
+| `fleet` | Fleet Asset Directory | `Fleet Overview \| Jatayu AI` | Yes | Wrapped | `EmptyState` component | N/A | ✅ Verified |
+| `aircraft` | Aircraft Digital Twin | `Aircraft {ID} \| Jatayu AI` | Yes | Wrapped | `ApiError` card | Toast on inference | ✅ Verified |
+| `predictions` | AI Prognostics Center | `Predictions Center \| Jatayu AI` | Yes | Wrapped | `EmptyState` component | N/A | ✅ Verified |
+| `maintenance`| Maintenance Planner | `Maintenance Planner \| Jatayu AI` | Yes | Wrapped | `EmptyState` component | Toast on optimize | ✅ Verified |
+| `spares` | Logistics & Spares | `Logistics & Spares \| Jatayu AI` | Yes | Wrapped | `EmptyState` component | Toast on reserve | ✅ Verified |
+| `simulation` | Prognostic Simulation Lab | `Simulation Lab \| Jatayu AI` | Yes | Wrapped | Inline error | Toast on step/reset | ✅ Verified |
+| `models` | Model Performance | `Model Performance \| Jatayu AI` | Yes | Wrapped | `ApiError` card | N/A | ✅ Verified |
+| `alerts` | Alerts & Actions | `Alerts & Actions \| Jatayu AI` | Yes | Wrapped | `EmptyState` component | Toast on ack | ✅ Verified |
+| `settings` | System Architecture | `System Architecture & Settings \| Jatayu AI` | Yes | Wrapped | Static docs | N/A | ✅ Verified |
 | `*` (404) | 404 Not Found | Default title | Yes | Wrapped | Custom 404 screen | N/A | ✅ Verified |

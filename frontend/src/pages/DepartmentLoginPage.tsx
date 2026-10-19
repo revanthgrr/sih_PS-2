@@ -282,7 +282,7 @@ export const DepartmentLoginPage: React.FC = () => {
         </div>
 
         <p className="text-center text-[11px] text-slate-400 mt-4">
-          Vimaan AI · Prototype demonstration environment
+          Jatayu AI · Prototype demonstration environment
         </p>
       </div>
     </div>

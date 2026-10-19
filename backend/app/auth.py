@@ -1,5 +1,5 @@
 """
-JWT Authentication module for Jatayu (AeroReady AI).
+JWT Authentication module for Jatayu AI.
 
 Provides:
   - Token creation and validation using python-jose

@@ -15,7 +15,7 @@ logger = logging.getLogger("jatayu")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("Initializing Jatayu (AeroReady AI) backend...")
+    logger.info("Initializing Jatayu AI backend...")
 
     # Validate startup configuration (raises RuntimeError in production for missing secrets)
     try:
@@ -39,8 +39,8 @@ _docs_url = None if settings.PRODUCTION_MODE else "/docs"
 _redoc_url = None if settings.PRODUCTION_MODE else "/redoc"
 
 app = FastAPI(
-    title="Jatayu - AeroReady AI",
-    description="Predictive Maintenance & Fleet Availability Intelligence Platform (SIH 26249)",
+    title="Jatayu AI",
+    description="Predictive Maintenance & Fleet Availability Intelligence Platform | Team TrackForce",
     version=settings.VERSION,
     lifespan=lifespan,
     docs_url=_docs_url,
@@ -83,9 +83,9 @@ async def add_security_headers(request: Request, call_next):
 @app.get("/")
 def root():
     return {
-        "product": "Jatayu (AeroReady AI)",
+        "product": "Jatayu AI",
         "subtitle": "Predictive Maintenance & Fleet Availability Intelligence Platform",
-        "problem_id": "SIH 26249",
+        "team": "TrackForce",
         "status": "operational",
         "api_docs": "/docs" if not settings.PRODUCTION_MODE else "disabled",
         "data_provenance": (

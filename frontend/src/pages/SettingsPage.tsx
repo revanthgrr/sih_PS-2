@@ -33,7 +33,7 @@ export const SettingsPage: React.FC = () => {
           </h3>
         </div>
         <p className="text-xs text-slate-500 mb-6">
-          How Jatayu (AeroReady AI) connects raw health-monitoring signals to optimized fleet availability in under 8 steps:
+          How Jatayu AI connects raw health-monitoring signals to optimized fleet availability in under 8 steps:
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -85,7 +85,7 @@ export const SettingsPage: React.FC = () => {
         </div>
         <div className="space-y-2 text-xs text-slate-600 leading-relaxed">
           <p>
-            1. <strong>Synthetic / Benchmark Data:</strong> This platform is a demonstration prototype developed for Smart India Hackathon (Problem ID: SIH 26249). It uses synthetic telemetry modeled after open aerospace prognostics datasets (such as NASA C-MAPSS). Real classified or operational military aircraft telemetry is not used.
+            1. <strong>Synthetic / Benchmark Data:</strong> This platform is a demonstration prototype developed by Team TrackForce. It uses synthetic telemetry modeled after open aerospace prognostics datasets (such as NASA C-MAPSS). Real classified or operational military aircraft telemetry is not used.
           </p>
           <p>
             2. <strong>Decision Support Only:</strong> AI predictions and automated maintenance schedules serve exclusively as decision support for maintenance planners. Final maintenance sign-offs, parts replacement, and flight releases must adhere to authorized military technical manuals and human engineering review.

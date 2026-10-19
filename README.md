@@ -1,8 +1,6 @@
-# 🛩️ Project Jatayu — AeroReady AI
+# 🛩️ Project Jatayu — Jatayu AI
 ### Predictive Maintenance & Fleet Availability Intelligence Platform
-**Smart India Hackathon | Problem Statement ID:** SIH 26249  
-**Organization:** Ministry of Defence | **Department:** Defence Services Staff College  
-**Category:** Software | **Theme:** Transportation & Logistics  
+**Team:** TrackForce | **Category:** Software | **Theme:** Transportation & Logistics  
 
 ---
 
@@ -22,7 +20,7 @@ Military and aerospace fleet managers face reduced operational aircraft availabi
 - Spare parts warehouse inventories and depot locations
 - Technician skill certifications and maintenance workshop bay capacities
 
-**Jatayu (AeroReady AI)** integrates these data sources into a unified aerospace command dashboard that operationalizes the full predictive maintenance lifecycle:
+**Jatayu (Jatayu AI)** integrates these data sources into a unified aerospace command dashboard that operationalizes the full predictive maintenance lifecycle:
 
 $$\textbf{Detect} \longrightarrow \textbf{Predict} \longrightarrow \textbf{Explain} \longrightarrow \textbf{Plan} \longrightarrow \textbf{Optimize} \longrightarrow \textbf{Improve Availability}$$
 

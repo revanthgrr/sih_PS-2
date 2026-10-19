@@ -1,6 +1,6 @@
-# Run Project Jatayu (AeroReady AI) - Start Both Servers
-Write-Host "==========================================================" -ForegroundColor Cyan
-Write-Host " Launching Project Jatayu (AeroReady AI) Full System...   " -ForegroundColor Cyan
+# Run Project Jatayu AI - Start Both Servers
+Write-Host "=========================================================" -ForegroundColor Cyan
+Write-Host " Launching Jatayu AI Full System...   " -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Cyan
 
 Start-Process powershell -ArgumentList "-NoExit", "-File", "$PSScriptRoot\run_backend.ps1"

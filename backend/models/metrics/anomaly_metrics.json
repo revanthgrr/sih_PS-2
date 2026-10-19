@@ -4,6 +4,6 @@
   "contamination_param": 0.08,
   "anomalies_detected_in_training": 24,
   "anomaly_rate": 0.08,
-  "score_mean": 0.0671,
-  "score_std": 0.0407
+  "score_mean": 0.0526,
+  "score_std": 0.0361
 }
