@@ -1,4 +1,4 @@
-# 🛩️ Air Power — Predictive Maintenance & Fleet Availability (Jatayu AI)
+# 🛩️ Jatayu AI — Predictive Maintenance & Fleet Availability Platform
 
 [![Smart India Hackathon 2026](https://img.shields.io/badge/SIH-2026-orange.svg)](https://www.sih.gov.in/)
 [![Problem Statement](https://img.shields.io/badge/Problem%20ID-SIH26249-blue.svg)](https://www.sih.gov.in/)
@@ -33,14 +33,14 @@
 
 ## Project Overview
 
-**Air Power – Predictive Maintenance & Fleet Availability (Jatayu AI)** is an intelligent aerospace prognostics and fleet readiness decision-support platform developed by **Team Track Force** for **Smart India Hackathon 2026**.
+**Jatayu AI** is an intelligent aerospace prognostics and fleet readiness decision-support platform developed by **Team Track Force** for **Smart India Hackathon 2026**.
 
 The platform is engineered to transition aerospace fleet operations from reactive and schedule-rigid maintenance to predictive, condition-based, and constraint-optimized fleet management. By synthesizing multi-channel sensor telemetry, historical servicing logs, depot spare part inventories, and workshop hangar constraints, Jatayu AI maximizes operational sortie availability while proactively mitigating unscheduled groundings.
 
 ### Official SIH Project Details
 | Field | Value |
 |---|---|
-| **Project Title** | Air Power – Predictive Maintenance & Fleet Availability |
+| **Project Title** | Jatayu AI — Predictive Maintenance & Fleet Availability |
 | **Problem Statement ID** | SIH26249 |
 | **Theme** | Transportation & Logistics |
 | **Category** | Software |
@@ -591,7 +591,7 @@ To ensure transparency and integrity, existing capabilities are clearly distingu
 - **Team Name:** Track Force
 - **Hackathon:** Smart India Hackathon 2026
 - **Problem Statement ID:** SIH26249
-- **Project Title:** Air Power – Predictive Maintenance & Fleet Availability
+- **Project Title:** Jatayu AI — Predictive Maintenance & Fleet Availability
 - **Theme:** Transportation & Logistics
 - **Category:** Software
 
