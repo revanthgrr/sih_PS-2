@@ -45,7 +45,7 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="flex items-center gap-2">
               <span className="font-bold text-base md:text-lg text-aerospace-900 tracking-tight">Jatayu</span>
               <span className="text-xs bg-aerospace-100 text-aerospace-800 font-semibold px-2 py-0.5 rounded border border-aerospace-200 hidden sm:inline">
-                Jatayu AI
+                VIMAAN AI
               </span>
             </div>
             <p className="text-xs text-slate-500 font-medium hidden lg:block">
